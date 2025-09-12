@@ -1,0 +1,113 @@
+// https://youtu.be/_JTnPG2XbdA?si=O23GNlpDKftFk3d2
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tp1opart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let imagen;
+
+        function preload() {
+            imagen = loadImage("F_32.jpg");
+        
+        }
+
+        function setup() {
+            createCanvas(800, 400);
+            console.log("hola mundo");
+        }
+
+        function draw() {
+            background(255);
+            
+            
+            if (imagen) {
+                image(imagen, 0, 0, 400, 400);
+            } else {
+              
+                fill(100, 150, 200);
+                rect(0, 0, 400, 400);
+            }
+            
+            let columnas = 8;
+            let filas = 8;
+            let tam = calcularTamanio(400, 400, columnas, filas);
+            let desplazamiento = moverFila(mouseY, height, tam);
+            let c1 = colorPrincipal();
+            let c2 = colorSecundario();
+            dibujarCuadrosInclinados(400, 0, tam, desplazamiento, c1, c2, columnas, filas);
+        }
+
+        function dibujarCuadrosInclinados(xIni, yIni, tam, desp, col1, col2, col, fil) {
+            for (let f = 0; f < fil; f++) {
+                for (let c = 0; c < col; c++) {
+                    let mover = (f % 2 === 0) ? 0 : desp;
+                    let x = xIni + c * tam + mover;
+                    let y = yIni + f * tam;
+                    let d = dist(c, f, col / 2.0, fil / 2.0);
+                    let angulo = map(d, 0, sqrt(col * col + fil * fil), -QUARTER_PI / 8, QUARTER_PI / 8);
+                    push();
+                    translate(x + tam / 2, y + tam / 2);
+                    rotate(angulo);
+                    if ((f + c) % 2 === 0) {
+                        fill(col1);
+                    } else {
+                        fill(col2);
+                    }
+                    noStroke();
+                    rectMode(CENTER);
+                    rect(0, 0, tam, tam);
+                    pop();
+                }
+            }
+        }
+
+        function calcularTamanio(ancho, alto, col, fil) {
+            return int(min(ancho / col, alto / fil));
+        }
+
+        function moverFila(mouseY, alto, tam) {
+            return int(map(mouseY, 0, alto, 0, tam / 2));
+        }
+
+        function colorPrincipal() {
+            if (keyIsPressed) {
+                if (key === 'r' || key === 'R') return color(255, 255, 0);
+                if (keyCode === UP_ARROW) return color(50, 205, 50);
+                if (keyCode === DOWN_ARROW) return color(0, 255, 255);
+            }
+            if (mouseIsPressed) {
+                if (mouseButton === LEFT) return color(255, 105, 180);
+                if (mouseButton === RIGHT) return color(0, 102, 255);
+            }
+            return color(255, 255, 0);
+        }
+
+        function colorSecundario() {
+            if (keyIsPressed) {
+                if (key === 'r' || key === 'R') return color(0);
+                if (keyCode === UP_ARROW) return color(128, 0, 128);
+                if (keyCode === DOWN_ARROW) return color(255, 0, 255);
+            }
+            if (mouseIsPressed) {
+                if (mouseButton === LEFT) return color(200, 0, 0);
+                if (mouseButton === RIGHT) return color(255, 165, 0);
+            }
+            return color(0);
+        }
+    </script>
+</body>
+</html>
