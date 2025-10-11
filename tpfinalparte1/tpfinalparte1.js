@@ -1,4 +1,4 @@
-
+// https://youtu.be/3uaEZuGPOYA
 let imagenes = [];
 let pantallaActual = 0;
 let botones = [];
@@ -332,3 +332,4 @@ function crearBotones() {
             opciones[2].texto, opciones[2].destino));
     }
 }
+
